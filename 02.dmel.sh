@@ -1,15 +1,3 @@
-gunzip -c dmel-all-chromosome-r5.56.fasta.gz | grep -o -E  'A' | wc -l >> dmel.data.txt
-gunzip -c dmel-all-chromosome-r5.56.fasta.gz | grep -o -E  'T' | wc -l >> dmel.data.txt
-gunzip -c dmel-all-chromosome-r5.56.fasta.gz | grep -o -E  'C' | wc -l >> dmel.data.txt
-gunzip -c dmel-all-chromosome-r5.56.fasta.gz | grep -o -E  'G' | wc -l >> dmel.data.txt
-gunzip -c dmel-all-chromosome-r5.56.fasta.gz | grep -o -E  'A|T|C|G' | wc -l >> dmel.data.txt
-gunzip -c dmel-all-chromosome-r5.56.fasta.gz | grep -o -E  'AT' | wc -l >> dmel.data.txt
-gunzip -c dmel-all-chromosome-r5.56.fasta.gz | grep -o -E  'AC' | wc -l >> dmel.data.txt
-gunzip -c dmel-all-chromosome-r5.56.fasta.gz | grep -o -E  'AG' | wc -l >> dmel.data.txt
-gunzip -c dmel-all-chromosome-r5.56.fasta.gz | grep -o -E  'AA' | wc -l >> dmel.data.txt
-gunzip -c dmel-all-chromosome-r5.56.fasta.gz | grep -o -E  'TA' | wc -l >> dmel.data.txt
-gunzip -c dmel-all-chromosome-r5.56.fasta.gz | grep -o -E  'TC' | wc -l >> dmel.data.txt
-gunzip -c dmel-all-chromosome-r5.56.fasta.gz | grep -o -E  'TG' | wc -l >> dmel.data.txt
 gunzip -c dmel-all-chromosome-r5.56.fasta.gz | grep -o -E  'TT' | wc -l >> dmel.data.txt
 gunzip -c dmel-all-chromosome-r5.56.fasta.gz | grep -o -E  'CA' | wc -l >> dmel.data.txt
 gunzip -c dmel-all-chromosome-r5.56.fasta.gz | grep -o -E  'CT' | wc -l >> dmel.data.txt

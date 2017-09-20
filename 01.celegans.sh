@@ -1,7 +1,3 @@
-gunzip -c c_elegans.genomic.fa.gz | grep -o -E  'a' | wc -l >> celegans_data.txt
-gunzip -c c_elegans.genomic.fa.gz | grep -o -E  't' | wc -l >> celegans_data.txt
-gunzip -c c_elegans.genomic.fa.gz | grep -o -E  'c' | wc -l >> celegans_data.txt
-gunzip -c c_elegans.genomic.fa.gz | grep -o -E  'g' | wc -l >> celegans_data.txt
 gunzip -c c_elegans.genomic.fa.gz | grep -o -E  'a|t|c|g' | wc -l >> celegans_data.txt
 gunzip -c c_elegans.genomic.fa.gz | grep -o -E  'at' | wc -l >> celegans_data.txt
 gunzip -c c_elegans.genomic.fa.gz | grep -o -E  'ac' | wc -l >> celegans_data.txt
