@@ -1,0 +1,75 @@
+Adding an affiliate cohort to our pipelines
+
+Changes to "portal_importer_configuration"
+1. add entry into "cancer_studies" tab in "portal_importer_configuration" spreadsheet for new cancer study
+2. add column in "cancer_studies" tab with new "portal" column name (ex. "msk-hartford-portal")
+3. add entry to "portals" tab in "portal_importer_configuration" spreadsheet for new column name added in (2)
+
+
+Changes to "knowledgesystems/pipelines" repo 
+1. Add new public static string in CancerStudyMetadata for new portal name we defined above (ex. public static final String MSK_HARTFORDHEALTHCARE_PORTAL_COLUMN_KEY = "msk-hartford-portal";)
+2. Add this variable to the set of strings contained in CancerStudyMetadata HashSet MSK_PORTAL_COLUMN_KEY_SET. 
+
+Before change:
+public static final List<String> MSK_PORTAL_COLUMN_KEY_SET = Arrays.asList(
+	new String[] {MSK_PORTAL_COLUMN_KEY, 
+					MSK_IMPACT_PORTAL_COLUMN_KEY, 
+					MSK_HEMEPACT_PORTAL_COLUMN_KEY,
+					MSK_RAINDANCE_PORTAL_COLUMN_KEY, 
+					MSK_ARCHER_PORTAL_COLUMN_KEY, 
+					MSK_MIXEDPACT_PORTAL_COLUMN_KEY,
+					MSK_KINGSCOUNTY_PORTAL_COLUMN_KEY, 
+					MSK_LEHIGHVALLEY_PORTAL_COLUMN_KEY, 
+					MSK_QUEENSCANCERCENTER_PORTAL_COLUMN_KEY,
+					MSK_MIAMICANCERINSTITUTE_PORTAL_COLUMN_KEY,
+					MSK_FMI_LYMPHOMA_PORTAL_COLUMN_KEY
+				});
+
+After change:
+public static final List<String> MSK_PORTAL_COLUMN_KEY_SET = Arrays.asList(
+	new String[] {MSK_PORTAL_COLUMN_KEY, 
+					MSK_IMPACT_PORTAL_COLUMN_KEY, 
+					MSK_HEMEPACT_PORTAL_COLUMN_KEY,
+					MSK_RAINDANCE_PORTAL_COLUMN_KEY, 
+					MSK_ARCHER_PORTAL_COLUMN_KEY, 
+					MSK_MIXEDPACT_PORTAL_COLUMN_KEY,
+					MSK_KINGSCOUNTY_PORTAL_COLUMN_KEY, 
+					MSK_LEHIGHVALLEY_PORTAL_COLUMN_KEY, 
+					MSK_QUEENSCANCERCENTER_PORTAL_COLUMN_KEY,
+					MSK_MIAMICANCERINSTITUTE_PORTAL_COLUMN_KEY,
+					MSK_HARTFORDHEALTHCARE_PORTAL_COLUMN_KEY,  <---- new portal column key added
+					MSK_FMI_LYMPHOMA_PORTAL_COLUMN_KEY
+				});
+				
+				
+Changes to "knowledgesystems/cmo-pipelines" repo
+1. Add the new study path to "automation-environment.sh"
+2. Changes to "import-dmp-impact-data.sh"
+	- create new temp notification file (ex. hartfordhealthcare_notification_file=$(mktemp $tmp/hartfordhealthcare-portal-update-notification.$now.XXXXXX))
+	- add flags for indicating subset or import failures of new cohort (ex. MSK_HARTFORD_SUBSET_FAIL=0, IMPORT_FAIL_HARTFORD=0)
+	- call subset script for new cohort and add appropriate if/else checks to update SUBSET flag to 1 if subset failed or to call the "addCancerTypeCaseLists" function if the subset was successful.
+	- call the import temp study script and commit or revert data if the import was successful or unsuccessful, respectively. Update the IMPORT flag to 1 for the new cohort if the import failed. 
+	- send the subset failure notification email (if necessary)
+	- email out the temp notification file
+
+
+Initializing the dataset in the msk-impact mercurial repo:
+0. make sure you have the latest changes from the msk-impact mercurial repo!!! (hg pull -u)
+1. cd into the msk-impact directory and create a new directory based on the cancer study identifier (ex. mkdir msk_hartfordhealthcare)
+2. create new directory for the case lists as well (ex. mkdir msk_hartfordhealthcare/case_lists)
+3. run the subset script for the new cohort (** remember to touch the meta_clinical.txt file for mixedpact first and then remove afterwards! This is necessary to subset clinical data from mixedpact)
+
+ex.
+touch mixedpact/meta_clinical.txt
+bash ~/cbio-projects/cmo-pipelines/import-scripts/subset-impact-data.sh -i=msk_hartfordhealthcare -o=$MSK_HARTFORD_DATA_HOME -m=$MSK_MIXEDPACT_DATA_HOME -f="INSTITUTE=Hartford Healthcare" -s=hartford_subset.txt -p=/Users/ochoaa/cbio-projects/cmo-pipelines/import-scripts
+rm mixedpact/meta_clinical.txt
+
+4. run the create cancer type case lists for new cohort 
+
+ex. 
+python ~/cbio-projects/cmo-pipelines/import-scripts/create_case_lists_by_cancer_type.py --clinical-file="msk_hartfordhealthcare/data_clinical.txt" --output-directory="msk_hartfordhealthcare/case_lists" --study-id="msk_hartfordhealthcare" --attribute="CANCER_TYPE"
+
+5. create meta files for all datatypes that were successfully subset - you can copy the meta files in the msk-impact study directory and then update the properties in the meta files to reference the new cohort's cancer study identifier. (** Remember to rename the SEG meta file to contain the cancer study identifier for the new cohort!)
+6. create a meta study file for the new cohort - you can refer to one of the other affiliate studies (ex. msk_miamicancerinstitute) as a template.
+7. delete the subset file that you wrote to 
+8. add and commit your changes to mercurial for the new cohort
