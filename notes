@@ -1,0 +1,40 @@
+portal_importer_configuration 
+
+PART 1
+cancer_studies tab
+new column - portal
+new row - the cancer study 
+change all the metadata - path/description/groups
+
+PART 2
+portals tab
+copy all the information (row) - new name (new study/portal)
+
+PART 3
+quick pipelines fix - github repo
+CancerStudyMetadata.java - create a new variable holding new portal
+add it to key set that can be referenced in other methods (portal column name) 'msk-hartford-portal'
+
+PART 4
+add to automation-environment.sh - new path to directory
+i.e MSK_HARTFORDHEALTHCARE_HOME = $PORTAL_DATA_HOME/msk-impact/msk_hartfodhealthcare
+
+PART 5
+add to import-dmp-impact-data.sh - new notification file
+i.e hartfordhealthcare_notifiaciton_file=$mktemp .....
+
+PART 6
+subset_impact_data.sh 
+add SUBSET_FAIL call flag (fail and import)
+add bash script that calls merge/subsetting scripts for new study
+
+addCancerTypeCaseLists - case list for every type of cancer 
+identifier - case list needs directory and identifier 
+
+Part 7 
+import_dmp_impact_data.sh
+add import script for new cancer study wtiih all the checks
+
+Part 8
+initialize directories 
+case_list directory & study directory
