@@ -1,9 +1,0 @@
-gunzip -c dmel-all-chromosome-r5.56.fasta.gz | grep -o -E  'TT' | wc -l >> dmel.data.txt
-gunzip -c dmel-all-chromosome-r5.56.fasta.gz | grep -o -E  'CA' | wc -l >> dmel.data.txt
-gunzip -c dmel-all-chromosome-r5.56.fasta.gz | grep -o -E  'CT' | wc -l >> dmel.data.txt
-gunzip -c dmel-all-chromosome-r5.56.fasta.gz | grep -o -E  'CG' | wc -l >> dmel.data.txt
-gunzip -c dmel-all-chromosome-r5.56.fasta.gz | grep -o -E  'CC' | wc -l >> dmel.data.txt
-gunzip -c dmel-all-chromosome-r5.56.fasta.gz | grep -o -E  'GA' | wc -l >> dmel.data.txt
-gunzip -c dmel-all-chromosome-r5.56.fasta.gz | grep -o -E  'GT' | wc -l >> dmel.data.txt
-gunzip -c dmel-all-chromosome-r5.56.fasta.gz | grep -o -E  'GC' | wc -l >> dmel.data.txt
-gunzip -c dmel-all-chromosome-r5.56.fasta.gz | grep -o -E  'GG' | wc -l >> dmel.data.txt
